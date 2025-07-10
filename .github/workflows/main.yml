@@ -43,6 +43,12 @@ jobs:
           echo "${{ secrets.GOOGLE_CREDENTIALS_B64 }}" | base64 -d > gcreds.json
 
 
+      - name: Run Lc Recv Data
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
+        run: python downLoad_LC_Recv_Data.py
+
+
       - name: Run Zipper FG Delivery Data
         env:
           GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
