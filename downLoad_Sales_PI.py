@@ -255,69 +255,55 @@ while True:
         log.info("=== Click on  checkbox option ===")
         wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[3]/div[2]/table/thead/tr/th[1]/div"))).click() 
         time.sleep(2) 
+            # Step 2: Check if "Select All" text is present anywhere on the page
+        if "Select all" in driver.page_source:
+            log.info("=== 'Select All' text found. Proceeding with normal flow ===")
 
-        try:
-            # Try to find and click the element
-            element = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[1]/span/a[1]")))
-            element.click()
+            # Click on "Select All"
+            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[1]/span/a[1]"))).click()
             time.sleep(2)
-            log.info("Clicked on 'Select All' option")
-            # Click on  select all option 
-            log.info("=== Click on select all option ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[1]/span/a[1]"))).click() 
-            time.sleep(2) 
-            
-            # Click on Action button option 
+            # Continue with action → export → download flow
             log.info("=== Click on Action option ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/button"))).click() 
-            time.sleep(2) 
-            
-            # Click on export option 
+            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/button"))).click()
+            time.sleep(2)
+
             log.info("=== Click on export option ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/div/span[1]"))).click() 
-            time.sleep(2) 
-        
-            # Click on download template option to get my template
-            log.info("=== Click on download template option to get my template ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select"))).click() 
-            time.sleep(2) 
-        
-            # Click on my template 0_ABCD_arifuls
-            log.info("=== Click on my template 0_ABCD_arifuls ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select/option[2]"))).click() 
-            time.sleep(2) 
-            
-            # Click on export option to download the data
-            log.info("=== Click on export option to download the data ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/button[1]"))).click() 
-            time.sleep(5) 
-        except (TimeoutException, NoSuchElementException):
-            # Element not found or not clickable
-            log.warning("'Select All' element not found. Executing alternate logic...")
-            # Click on Action button option 
+            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/div/span[1]"))).click()
+            time.sleep(2)
+
+            log.info("=== Click on download template option ===")
+            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select"))).click()
+            time.sleep(2)
+
+            log.info("=== Select custom template 0_ABCD_arifuls ===")
+            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select/option[2]"))).click()
+            time.sleep(2)
+
+            log.info("=== Final export button click ===")
+            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/button[1]"))).click()
+            time.sleep(5)
+        else:
+            # Continue with action → export → download flow
             log.info("=== Click on Action option ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/button"))).click() 
-            time.sleep(2) 
-            
-            # Click on export option 
+            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/button"))).click()
+            time.sleep(2)
+
             log.info("=== Click on export option ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/div/span[1]"))).click() 
-            time.sleep(2) 
-        
-            # Click on download template option to get my template
-            log.info("=== Click on download template option to get my template ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select"))).click() 
-            time.sleep(2) 
-        
-            # Click on my template 0_ABCD_arifuls
-            log.info("=== Click on my template 0_ABCD_arifuls ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select/option[2]"))).click() 
-            time.sleep(2) 
-            
-            # Click on export option to download the data
-            log.info("=== Click on export option to download the data ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/button[1]"))).click() 
-            time.sleep(5) 
+            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/div/span[1]"))).click()
+            time.sleep(2)
+
+            log.info("=== Click on download template option ===")
+            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select"))).click()
+            time.sleep(2)
+
+            log.info("=== Select custom template 0_ABCD_arifuls ===")
+            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select/option[2]"))).click()
+            time.sleep(2)
+
+            log.info("=== Final export button click ===")
+            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/button[1]"))).click()
+            time.sleep(5)
+            raise NoSuchElementException("Text 'Select All' not found.")
        
         # === Step 9: Confirm file downloaded ===
         
