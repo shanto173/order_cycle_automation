@@ -346,9 +346,6 @@ try:
     # Load into DataFrame
     df_production_pcs = pd.read_excel(latest_file,sheet_name=0)
     print("File loaded into DataFrame.")
-
-    df_production_usd = pd.read_excel(latest_file,sheet_name=1)
-    print("File loaded into DataFrame.")
     
     # Setup Google Sheets API
     scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
