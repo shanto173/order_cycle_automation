@@ -303,7 +303,6 @@ while True:
             log.info("=== Final export button click ===")
             wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/button[1]"))).click()
             time.sleep(5)
-            raise NoSuchElementException("Text 'Select All' not found.")
        
         # === Step 9: Confirm file downloaded ===
         

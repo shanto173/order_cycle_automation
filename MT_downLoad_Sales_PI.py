@@ -303,7 +303,6 @@ while True:
             log.info("=== Final export button click ===")
             wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/button[1]"))).click()
             time.sleep(5)
-            raise NoSuchElementException("Text 'Select All' not found.")
 
         
        
@@ -367,7 +366,7 @@ try:
 
     # Paste new data
     set_with_dataframe(worksheet, df_production_pcs)
-    print("Data pasted to Google Sheet (Sheet4).")
+    print("Data pasted to Google Sheet Metal PI.")
     
     # === ✅ Add timestamp to Y2 ===
     local_tz = pytz.timezone('Asia/Dhaka')
