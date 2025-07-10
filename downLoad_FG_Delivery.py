@@ -295,18 +295,15 @@ try:
     client = gspread.authorize(creds)
 
     # Open the sheet and paste the data
-    sheet = client.open_by_key("1uUcLk27P-wAtgGYrSy7rVFFnw3JpEiJKGAgZICbBd-k")
-    worksheet = sheet.worksheet("Zip FG packing")
+    sheet = client.open_by_key("1acV7UrmC8ogC54byMrKRTaD9i1b1Cf9QZ-H1qHU5ZZc")
+    worksheet = sheet.worksheet("Zip Fg pack")
     
-    sheet2 = client.open_by_key("1acV7UrmC8ogC54byMrKRTaD9i1b1Cf9QZ-H1qHU5ZZc")
-    worksheet2 = sheet.worksheet("Zip Fg pack")
 
     # Clear old content (optional)
     worksheet.batch_clear(['A:AC'])
 
     # Paste new data
     set_with_dataframe(worksheet, df_production_pcs)
-    set_with_dataframe(worksheet2, df_production_pcs)
     print("Data pasted to Google Sheet (Sheet4).")
     
     # === ✅ Add timestamp to Y2 ===
