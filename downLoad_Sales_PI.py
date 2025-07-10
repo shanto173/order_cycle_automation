@@ -46,7 +46,7 @@ chrome_options.add_experimental_option("prefs", {
     "safebrowsing.enabled": True
 })
 
-pattern = "Packing and Invoice Summery"
+pattern = "Sales Order (sale.order)"
 
 def is_file_downloaded():
     return any(Path(download_dir).glob(f"*{pattern}*.xlsx"))
