@@ -299,7 +299,7 @@ try:
     worksheet = sheet.worksheet("MT FG packing")
 
     # Clear old content (optional)
-    worksheet.clear()
+    worksheet.batch_clear(['A:AC'])
 
     # Paste new data
     set_with_dataframe(worksheet, df_production_pcs)
