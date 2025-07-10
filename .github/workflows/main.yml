@@ -52,8 +52,7 @@ jobs:
       - name: Run Metal Trims Sales PI Data
         env:
           GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
-        run: python downLoad_MT_order_relased.py
-
+        run: python MT_downLoad_Sales_PI.py
 
       - name: Run downLoad_Invoice_summary
         env:
