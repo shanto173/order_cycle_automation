@@ -34,11 +34,11 @@ download_dir = os.path.join(os.getcwd(), "download")
 os.makedirs(download_dir, exist_ok=True)
 
 chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--headless")  # 🔹 Run Chrome in headless mode
-chrome_options.add_argument("--disable-gpu")  # Optional: disable GPU usage
-chrome_options.add_argument("--window-size=1920,1080")  # Optional: set window size for full rendering
-chrome_options.add_argument("--no-sandbox")  # Optional: for Linux environments
-chrome_options.add_argument("--disable-dev-shm-usage")  # Optional: prevents crashes on some systems
+# chrome_options.add_argument("--headless")  # 🔹 Run Chrome in headless mode
+# chrome_options.add_argument("--disable-gpu")  # Optional: disable GPU usage
+# chrome_options.add_argument("--window-size=1920,1080")  # Optional: set window size for full rendering
+# chrome_options.add_argument("--no-sandbox")  # Optional: for Linux environments
+# chrome_options.add_argument("--disable-dev-shm-usage")  # Optional: prevents crashes on some systems
 chrome_options.add_experimental_option("prefs", {
     "download.default_directory": download_dir,
     "download.prompt_for_download": False,
@@ -139,10 +139,10 @@ while True:
         log.info("=== click on search Box and send some key like Sales Type ===")
         input_box = driver.find_element(By.XPATH, "/html/body/div[2]/div[2]/div[2]/div[1]/div[1]/div[2]/input")
         # Send the text "Sales Type"
-        input_box.send_keys("Payment Terms")
+        input_box.send_keys("Status")
         time.sleep(2)
         # Step 11
-        log.info("=== Click on Payment terms Option ===")
+        log.info("=== Click on Status Option ===")
         wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div[2]/div[1]/div[2]/ul/li/button[1]"))).click() 
         time.sleep(3)
        
@@ -155,18 +155,22 @@ while True:
         time.sleep(3) 
         
         # Step 13
-        log.info("=== Click on the contains condition Option ===")
-        wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div/div/div[2]/div/div[1]/div[2]/select/option[5]"))).click() 
+        log.info("=== Click on the = condition Option ===")
+        wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div/div/div[2]/div/div[1]/div[2]/select/option[1]"))).click() 
         time.sleep(3) 
         
-        input_box = wait.until(EC.presence_of_element_located((
-            By.XPATH,
-            "/html/body/div[2]/div[2]/div/div/div/div/main/div/div/div/div[2]/div/div[1]/div[3]/input"
-        )))
-
-        # Clear and send keys
-        input_box.clear()
-        input_box.send_keys("LC")
+        
+        log.info("=== Click on is to get the list of poster option ===")
+        wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div/div/div[2]/div/div[1]/div[3]/select"))).click() 
+        time.sleep(3) 
+        
+        # Step 13
+        log.info("=== Click on the posted condition Option ===")
+        wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div/div/div[2]/div/div[1]/div[3]/select/option[2]"))).click() 
+        time.sleep(3) 
+        
+        
+        
         time.sleep(2)
         
     
