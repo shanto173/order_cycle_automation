@@ -19,6 +19,7 @@ from google.oauth2 import service_account
 import pytz
 import traceback
 from selenium.webdriver.common.keys import Keys 
+import calendar
 
 # === Setup Logging ===
 # This sets up logging to the console (GitHub Actions will capture this)
@@ -110,6 +111,45 @@ while True:
         log.info("=== click on Released Summary of report ===")
         wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div/div/div/div/div[1]/div[2]/div/select/option[20]"))).click() 
         time.sleep(4)
+        
+        # Step 7.1
+        
+        today = datetime.today()
+        # === 2. Apply the logic: use previous month if day < 5
+        if today.day < 5:
+            year = today.year if today.month > 1 else today.year - 1
+            month = today.month - 1 if today.month > 1 else 12
+        else:
+            year = today.year
+            month = today.month
+
+        # === 3. Build datetime strings
+        start_date = datetime(year, month, 1).strftime("%d/%m/%Y")
+        last_day = calendar.monthrange(year, month)[1]
+        end_date = datetime(year, month, last_day).strftime("%d/%m/%Y")
+
+        # === 5. Send values to input boxes
+        start_input_xpath = "/html/body/div[2]/div[2]/div/div/div/div/main/div/div/div/div/div/div[2]/div[2]/div/div/input"
+        end_input_xpath   = "/html/body/div[2]/div[2]/div/div/div/div/main/div/div/div/div/div/div[3]/div[2]/div/div/input"
+        time.sleep(3) 
+        # === Clear and input datetime values ===
+        # === Find the start input field and clear using Ctrl+A + Backspace
+        start_input = driver.find_element(By.XPATH, start_input_xpath)
+        start_input.send_keys(Keys.CONTROL + 'a')   # Select all
+        start_input.send_keys(Keys.BACKSPACE)       # Delete
+        start_input.send_keys(start_date)           # Send new date
+
+        time.sleep(2)
+
+        # === Do the same for the end input field
+        end_input = driver.find_element(By.XPATH, end_input_xpath)
+        end_input.send_keys(Keys.CONTROL + 'a')
+        end_input.send_keys(Keys.BACKSPACE)
+        end_input.send_keys(end_date)
+        time.sleep(2)
+        
+        
+        
         
         # Step 8
         # download the report
