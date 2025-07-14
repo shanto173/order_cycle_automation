@@ -31,11 +31,11 @@ download_dir = os.path.join(os.getcwd(), "download")
 os.makedirs(download_dir, exist_ok=True)
 
 chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--headless")  # 🔹 Run Chrome in headless mode
-chrome_options.add_argument("--disable-gpu")  # Optional: disable GPU usage
-chrome_options.add_argument("--window-size=1920,1080")  # Optional: set window size for full rendering
-chrome_options.add_argument("--no-sandbox")  # Optional: for Linux environments
-chrome_options.add_argument("--disable-dev-shm-usage")  # Optional: prevents crashes on some systems
+# chrome_options.add_argument("--headless")  # 🔹 Run Chrome in headless mode
+# chrome_options.add_argument("--disable-gpu")  # Optional: disable GPU usage
+# chrome_options.add_argument("--window-size=1920,1080")  # Optional: set window size for full rendering
+# chrome_options.add_argument("--no-sandbox")  # Optional: for Linux environments
+# chrome_options.add_argument("--disable-dev-shm-usage")  # Optional: prevents crashes on some systems
 chrome_options.add_experimental_option("prefs", {
     "download.default_directory": download_dir,
     "download.prompt_for_download": False,
@@ -47,6 +47,8 @@ pattern = "Packing and Invoice Summery"
 
 def is_file_downloaded():
     return any(Path(download_dir).glob(f"*{pattern}*.xlsx"))
+
+
 
 while True:
     try:
@@ -66,26 +68,41 @@ while True:
 
         # === Step 2: Click user/company switch ===
         time.sleep(2)
-        try:
-            wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".modal-backdrop")))
-        except:
-            pass
+        while True:
+            try:
+                # Wait for modal to disappear
+                wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".modal-backdrop")))
+            except:
+                pass  # Modal didn't appear — safe to proceed
 
-        switcher_span = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR,
-            "div.o_menu_systray div.o_switch_company_menu > button > span"
-        )))
-        driver.execute_script("arguments[0].scrollIntoView(true);", switcher_span)
-        switcher_span.click()
-        time.sleep(2)
+            try:
+                # Step 1: Click company switcher
+                switcher_span = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR,
+                    "div.o_menu_systray div.o_switch_company_menu > button > span"
+                )))
+                driver.execute_script("arguments[0].scrollIntoView(true);", switcher_span)
+                switcher_span.click()
+                time.sleep(2)
 
-        # === Step 3: Click 'Zipper' company ===
-        log.info("Click 'Zipper' company ===")
-        target_div = wait.until(EC.element_to_be_clickable((By.XPATH,
-            "//div[contains(@class, 'log_into')][span[contains(text(), 'Zipper')]]"
-        )))
-        driver.execute_script("arguments[0].scrollIntoView(true);", target_div)
-        target_div.click()
-        time.sleep(2)
+                # Step 2: Click 'Zipper' company
+                log.info("Clicking 'Zipper' company...")
+                target_div = wait.until(EC.element_to_be_clickable((By.XPATH,
+                    "//div[contains(@class, 'log_into')][span[contains(text(), 'Zipper')]]"
+                )))
+                driver.execute_script("arguments[0].scrollIntoView(true);", target_div)
+                target_div.click()
+                time.sleep(2)  # Let the page reload after switching
+
+                # Step 3: Check if Zipper is now present on the page
+                if "Zipper" in driver.page_source:
+                    print("✅ 'Zipper' company is now active.")
+                    break
+                else:
+                    log.warning("'Zipper' not detected yet, retrying...")
+
+            except Exception as e:
+                log.error(f"❌ Error during switch attempt: {e}")
+            time.sleep(2)
 
         # step 4
         # === Trigger global search box by sending a keystroke ===
