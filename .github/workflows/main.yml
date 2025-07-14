@@ -42,6 +42,11 @@ jobs:
         run: |
           echo "${{ secrets.GOOGLE_CREDENTIALS_B64 }}" | base64 -d > gcreds.json
 
+      - name: Run downLoad_Invoice_summary
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
+        run: python downLoad_Invoice_summary.py
+
 
       - name: Run Lc Recv Data
         env:
@@ -75,10 +80,6 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
         run: python MT_downLoad_Sales_PI.py
 
-      - name: Run downLoad_Invoice_summary
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
-        run: python downLoad_Invoice_summary.py
 
       - name: Run order_relased
         env:
