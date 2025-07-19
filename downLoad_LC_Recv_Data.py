@@ -236,7 +236,7 @@ while True:
         # Click on confirm or loading data 
         log.info("=== Click on  Confirm option ===")
         wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/button[1]"))).click() 
-        time.sleep(2) 
+        time.sleep(10) 
         
        
  ######## condition step is completed ########
@@ -273,7 +273,7 @@ while True:
 
             log.info("=== Final export button click ===")
             wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/button[1]"))).click()
-            time.sleep(5)
+            time.sleep(30)
         else:
             # Continue with action → export → download flow
             log.info("=== Click on Action option ===")
@@ -294,7 +294,7 @@ while True:
 
             log.info("=== Final export button click ===")
             wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/button[1]"))).click()
-            time.sleep(5)
+            time.sleep(30)
        
         # === Step 9: Confirm file downloaded ===
         
@@ -336,6 +336,7 @@ try:
 
     # Load into DataFrame
     df_production_pcs = pd.read_excel(latest_file,sheet_name=0)
+    time.sleep(5)
     print("File loaded into DataFrame.")
     
     # Setup Google Sheets API
@@ -350,18 +351,22 @@ try:
     sheet = client.open_by_key("1uUcLk27P-wAtgGYrSy7rVFFnw3JpEiJKGAgZICbBd-k")
     worksheet = sheet.worksheet("LC recv")
 
-    # Clear old content (optional)
-    worksheet.batch_clear(['A:AC'])
+    if df_production_pcs.empty:
+        print("Skip: DataFrame is empty, not pasting to sheet.")
+    else:
+        # Paste new data
+        # Clear old content (optional)
+        worksheet.batch_clear(['A:AC'])
+        # Paste new data
+        set_with_dataframe(worksheet, df_production_pcs)
+        print("Data pasted to Google Sheet (Sheet4).")
+        # === ✅ Add timestamp to Y2 ===
+        local_tz = pytz.timezone('Asia/Dhaka')
+        local_time = datetime.now(local_tz).strftime("%Y-%m-%d %H:%M:%S")
+        worksheet.update("AC2", [[f"{local_time}"]])
+        print(f"Timestamp written to AC2: {local_time}")
 
-    # Paste new data
-    set_with_dataframe(worksheet, df_production_pcs)
-    print("Data pasted to Google Sheet (Sheet4).")
     
-    # === ✅ Add timestamp to Y2 ===
-    local_tz = pytz.timezone('Asia/Dhaka')
-    local_time = datetime.now(local_tz).strftime("%Y-%m-%d %H:%M:%S")
-    worksheet.update("AC2", [[f"{local_time}"]])
-    print(f"Timestamp written to AC2: {local_time}")
     
 
 except Exception as e:
