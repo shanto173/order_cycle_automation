@@ -136,7 +136,7 @@ while True:
         # download the report
         log.info("=== download the report ===")
         wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/footer/button[1]"))).click() 
-        time.sleep(30)
+        time.sleep(60)
        
         # === Step 9: Confirm file downloaded ===
         
