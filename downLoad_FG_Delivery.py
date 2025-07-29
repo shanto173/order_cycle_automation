@@ -196,7 +196,7 @@ while True:
         wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[2]/div/table/thead/tr/th[1]/div"))).click() 
         time.sleep(2) 
             # Step 2: Check if "Select All" text is present anywhere on the page
-        if "Select all" in driver.page_source:
+        if re.search(r"Select all\s*\d*", driver.page_source):
             log.info("=== 'Select All' text found. Proceeding with normal flow ===")
 
             # Click on "Select All"
