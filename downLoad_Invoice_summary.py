@@ -166,7 +166,7 @@ while True:
         end_input.send_keys(Keys.CONTROL + 'a')
         end_input.send_keys(Keys.BACKSPACE)
         end_input.send_keys(end_date)
-        time.sleep(2)
+        time.sleep(15)
         
         
         
