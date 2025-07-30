@@ -41,10 +41,7 @@ jobs:
           echo "${{ secrets.GOOGLE_CREDENTIALS_B64 }}" | base64 -d > gcreds.json
 
 
-      - name: Run Metal Trims Sales PI Data
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
-        run: python MT_downLoad_Sales_PI.py
+##########################     Production DATA            #############################
         
 
       - name: Run downLoad_Invoice_summary
@@ -58,10 +55,15 @@ jobs:
         run: python downLoad_MT_Invoice_summary.py
 
 
+##########################     Combine Invice DATA            #############################
+
       - name: Run Lc Recv Data
         env:
           GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
         run: python downLoad_LC_Recv_Data.py
+
+
+##########################     FG DATA            #############################
 
 
       - name: Run Zipper FG Delivery Data
@@ -77,13 +79,21 @@ jobs:
 
 
 
-
+##########################     PI DATA            #############################
 
       - name: Run Zipper Sales PI Data
         env:
           GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
         run: python downLoad_Sales_PI.py
 
+
+      - name: Run Metal Trims Sales PI Data
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
+        run: python MT_downLoad_Sales_PI.py
+
+
+##########################     OA DATA            #############################
 
       - name: Run order_relased
         env:
