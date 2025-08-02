@@ -57,10 +57,10 @@ jobs:
 
 ##########################     Combine Invice DATA            #############################
 
-      - name: Run Lc Recv Data
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
-        run: python downLoad_LC_Recv_Data.py
+      # - name: Run Lc Recv Data
+      #   env:
+      #     GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
+      #   run: python downLoad_LC_Recv_Data.py
 
 
 ##########################     FG DATA            #############################
