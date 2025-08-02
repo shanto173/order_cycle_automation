@@ -223,27 +223,38 @@ while True:
             wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/button[1]"))).click()
             time.sleep(30)
         else:
-            # Continue with action → export → download flow
-            log.info("=== Click on Action option ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/button"))).click()
-            time.sleep(2)
+            try:
+                wait.until(EC.visibility_of_element_located((By.XPATH, "//*[contains(text(), 'Actions')]")))
+                found_actions = True
+            except TimeoutException:
+                found_actions = False
+                    
+            if not found_actions:
+                time.sleep(5)
+                print("System exits here")
+                break
+            else:
+                # Continue with action → export → download flow
+                log.info("=== Click on Action option ===")
+                wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/button"))).click()
+                time.sleep(2)
 
-            log.info("=== Click on export option ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/div/span[1]"))).click()
-            time.sleep(2)
+                log.info("=== Click on export option ===")
+                wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/div/span[1]"))).click()
+                time.sleep(2)
 
-            log.info("=== Click on download template option ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select"))).click()
-            time.sleep(2)
+                log.info("=== Click on download template option ===")
+                wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select"))).click()
+                time.sleep(2)
 
-            log.info("=== Select custom template 0_ABCD_arifuls ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select/option[2]"))).click()
-            time.sleep(2)
+                log.info("=== Select custom template 0_ABCD_arifuls ===")
+                wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select/option[2]"))).click()
+                time.sleep(2)
 
-            log.info("=== Final export button click ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/button[1]"))).click()
-            time.sleep(30)
-       
+                log.info("=== Final export button click ===")
+                wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/button[1]"))).click()
+                time.sleep(30)
+        
         # === Step 9: Confirm file downloaded ===
         
         # === Step 9: Confirm file downloaded ===

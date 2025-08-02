@@ -210,7 +210,7 @@ while True:
             month = today.month
 
         # === 3. Build datetime strings
-        start_date = datetime(year, month, 1).strftime("%d/%m/%Y 00:00:45")
+        start_date = datetime(2025, 6, 1).strftime("%d/%m/%Y 00:00:45")
         last_day = calendar.monthrange(year, month)[1]
         end_date = datetime(year, month, last_day).strftime("%d/%m/%Y 23:55:45")
 
@@ -281,28 +281,32 @@ while True:
 
             log.info("=== Final export button click ===")
             wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/button[1]"))).click()
-            time.sleep(30)
+            time.sleep(60)
         else:
-            # Continue with action → export → download flow
-            log.info("=== Click on Action option ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/button"))).click()
-            time.sleep(2)
+            if not re.search(r"Actions", driver.page_source):
+                time.sleep(5)
+                sys.exit(1)
+            else:
+                # Continue with action → export → download flow
+                log.info("=== Click on Action option ===")
+                wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/button"))).click()
+                time.sleep(2)
 
-            log.info("=== Click on export option ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/div/span[1]"))).click()
-            time.sleep(2)
+                log.info("=== Click on export option ===")
+                wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div/div[1]/div/div[2]/div/div[2]/div[2]/div/span[1]"))).click()
+                time.sleep(2)
 
-            log.info("=== Click on download template option ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select"))).click()
-            time.sleep(2)
+                log.info("=== Click on download template option ===")
+                wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select"))).click()
+                time.sleep(2)
 
-            log.info("=== Select custom template 0_ABCD_arifuls ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select/option[2]"))).click()
-            time.sleep(2)
+                log.info("=== Select custom template 0_ABCD_arifuls ===")
+                wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/main/div/div[2]/div[3]/div/select/option[2]"))).click()
+                time.sleep(2)
 
-            log.info("=== Final export button click ===")
-            wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/button[1]"))).click()
-            time.sleep(30)
+                log.info("=== Final export button click ===")
+                wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/footer/button[1]"))).click()
+                time.sleep(30)
 
         
        
