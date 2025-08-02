@@ -209,7 +209,7 @@ while True:
             month = today.month
 
         # === 3. Build datetime strings
-        start_date = datetime(year, month, 1).strftime("%d/%m/%Y")
+        start_date = datetime(2025, 6, 1).strftime("%d/%m/%Y")
         last_day = calendar.monthrange(year, month)[1]
         end_date = datetime(year, month, last_day).strftime("%d/%m/%Y")
 
