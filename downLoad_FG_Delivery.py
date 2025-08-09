@@ -148,7 +148,7 @@ while True:
         
         today = datetime.today()
         # === 2. Apply the logic: use previous month if day < 5
-        if today.day < 1:
+        if today.day < 3:
             year = today.year if today.month > 1 else today.year - 1
             month = today.month - 1 if today.month > 1 else 12
         else:
