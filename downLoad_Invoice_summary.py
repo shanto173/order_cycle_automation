@@ -252,10 +252,10 @@ try:
         print(f"Error loading credentials: {e}")
         exit(1)
 
-        # Use gspread to authorize and access Google Sheets
-        client = gspread.authorize(creds)
+    # Use gspread to authorize and access Google Sheets
+    client = gspread.authorize(creds)
 
-        # Open the sheet for PCS data
+    # Open the sheet for PCS data
     try:
         sheet_pcs = client.open_by_key("1uUcLk27P-wAtgGYrSy7rVFFnw3JpEiJKGAgZICbBd-k")
         worksheet_pcs = sheet_pcs.worksheet("Prod Data")
