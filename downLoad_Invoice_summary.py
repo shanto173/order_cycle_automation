@@ -215,60 +215,83 @@ try:
     print(f"Latest file found: {latest_file.name}")
 
     # Load into DataFrame
-    df_production_pcs = pd.read_excel(latest_file,sheet_name=0)
-    print("File loaded into DataFrame.")
+    try:
+        df_production_pcs = pd.read_excel(latest_file, sheet_name=0)
+        print("File loaded into DataFrame (PCS).")
+        # Log initial shape and columns
+        print(f"PCS DataFrame shape: {df_production_pcs.shape}, Columns: {list(df_production_pcs.columns)}")
+        # Check if DataFrame has any non-header rows with data (exclude all-NaN or all-empty rows)
+        df_production_pcs_cleaned = df_production_pcs.dropna(how='all')  # Remove rows where ALL values are NaN
+        has_data_pcs = not df_production_pcs_cleaned.empty and df_production_pcs_cleaned.shape[0] > 0
+        print(f"PCS DataFrame has valid data rows: {has_data_pcs}")
+    except Exception as e:
+        print(f"Error loading PCS Excel sheet: {e}")
+        df_production_pcs = pd.DataFrame()
+        has_data_pcs = False
 
-    df_production_usd = pd.read_excel(latest_file,sheet_name=1)
-    print("File loaded into DataFrame.")
-    
-    # Setup Google Sheets API
+    try:
+        df_production_usd = pd.read_excel(latest_file, sheet_name=1)
+        print("File loaded into DataFrame (USD).")
+        # Log initial shape and columns
+        print(f"USD DataFrame shape: {df_production_usd.shape}, Columns: {list(df_production_usd.columns)}")
+        # Check if DataFrame has any non-header rows with data (exclude all-NaN or all-empty rows)
+        df_production_usd_cleaned = df_production_usd.dropna(how='all')  # Remove rows where ALL values are NaN
+        has_data_usd = not df_production_usd_cleaned.empty and df_production_usd_cleaned.shape[0] > 0
+        print(f"USD DataFrame has valid data rows: {has_data_usd}")
+    except Exception as e:
+        print(f"Error loading USD Excel sheet: {e}")
+        df_production_usd = pd.DataFrame()
+        has_data_usd = False
+
+        # Setup Google Sheets API
     scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-    creds = service_account.Credentials.from_service_account_file('gcreds.json', scopes=scope)
-    log.info("✅ Successfully loaded credentials.")
+    try:
+        creds = service_account.Credentials.from_service_account_file('gcreds.json', scopes=scope)
+        log.info("✅ Successfully loaded credentials.")
+    except Exception as e:
+        print(f"Error loading credentials: {e}")
+        exit(1)
 
-    # Use gspread to authorize and access Google Sheets
-    client = gspread.authorize(creds)
+        # Use gspread to authorize and access Google Sheets
+        client = gspread.authorize(creds)
 
-    # Open the sheet and paste the data
-    sheet_pcs = client.open_by_key("1uUcLk27P-wAtgGYrSy7rVFFnw3JpEiJKGAgZICbBd-k")
-    worksheet_pcs = sheet_pcs.worksheet("Prod Data")
+        # Open the sheet for PCS data
+    try:
+        sheet_pcs = client.open_by_key("1uUcLk27P-wAtgGYrSy7rVFFnw3JpEiJKGAgZICbBd-k")
+        worksheet_pcs = sheet_pcs.worksheet("Prod Data")
+        if not has_data_pcs:
+            print("Skip: DataFrame (PCS) is empty or contains no valid data rows, not pasting to sheet.")
+        else:
+            # Clear old content and paste new data, preserving all columns
+            worksheet_pcs.clear()
+            set_with_dataframe(worksheet_pcs, df_production_pcs, include_index=False)
+            print("Data pasted to Google Sheet (Prod Data).")
+            # Add timestamp to AC2
+            local_tz = pytz.timezone('Asia/Dhaka')
+            local_time = datetime.now(local_tz).strftime("%Y-%m-%d %H:%M:%S")
+            worksheet_pcs.update("AC2", [[f"{local_time}"]])
+            print(f"Timestamp written to AC2: {local_time}")
+    except Exception as e:
+        print(f"Error updating PCS sheet: {e}")
 
-
-
-    if df_production_pcs.empty:
-        print("Skip: DataFrame is empty, not pasting to sheet.")
-    else:
-        # Clear old content (optional)
-        worksheet_pcs.clear()
-        # Paste new data
-        set_with_dataframe(worksheet_pcs, df_production_pcs)
-        print("Data pasted to Google Sheet (Sheet4).")
-        # === ✅ Add timestamp to Y2 ===
-        local_tz = pytz.timezone('Asia/Dhaka')
-        local_time = datetime.now(local_tz).strftime("%Y-%m-%d %H:%M:%S")
-        worksheet_pcs.update("AC2", [[f"{local_time}"]])
-        print(f"Timestamp written to AC2: {local_time}")
+        # Open the sheet for USD data
+    try:
+        sheet_usd = client.open_by_key("1uUcLk27P-wAtgGYrSy7rVFFnw3JpEiJKGAgZICbBd-k")
+        worksheet_usd = sheet_usd.worksheet("Prod Value")
+        if not has_data_usd:
+            print("Skip: DataFrame (USD) is empty or contains no valid data rows, not pasting to sheet.")
+        else:
+            # Clear old content and paste new data, preserving all columns
+            worksheet_usd.batch_clear(['A:AC'])
+            set_with_dataframe(worksheet_usd, df_production_usd, include_index=False)
+            print("Data pasted to Google Sheet (Prod Value).")
+            # Add timestamp to AC2
+            local_time1 = datetime.now(local_tz).strftime("%Y-%m-%d %H:%M:%S")
+            worksheet_usd.update("AC2", [[f"{local_time1}"]])
+            print(f"Timestamp written to AC2: {local_time1}")
+    except Exception as e:
+        print(f"Error updating USD sheet: {e}")
     
-    # USD paste
-    
-    sheet_usd = client.open_by_key("1uUcLk27P-wAtgGYrSy7rVFFnw3JpEiJKGAgZICbBd-k")
-    worksheet_usd = sheet_usd.worksheet("Prod Value")
-
-    # Clear old content (optional)
-    
-    if df_production_usd.empty:
-        print("Skip: DataFrame is empty, not pasting to sheet.")
-    else:
-        # Paste new data
-        worksheet_usd.batch_clear(['A:AC'])
-        # Paste new data
-        set_with_dataframe(worksheet_usd, df_production_usd)
-        print("Data pasted to Google Sheet (Sheet4).")
-        # === ✅ Add timestamp to Y2 ===
-        local_time1 = datetime.now(local_tz).strftime("%Y-%m-%d %H:%M:%S")
-        worksheet_usd.update("AC2", [[f"{local_time1}"]])
-        print(f"Timestamp written to AC2: {local_time1}")
-        
     
 
 except Exception as e:
