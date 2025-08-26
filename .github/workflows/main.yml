@@ -1,20 +1,38 @@
 name: Order Cycle process 
 
 on:
-  workflow_dispatch:  # Manual run
+  workflow_dispatch:
+    inputs:
+      script:
+        description: 'Which script to run? Leave empty for ALL'
+        required: false
+        default: 'ALL'
+        type: choice
+        options:
+          - ALL
+          - downLoad_Invoice_summary.py
+          - downLoad_MT_Invoice_summary.py
+          - downLoad_LC_Recv_Data.py
+          - downLoad_FG_Delivery.py
+          - MT_downLoad_FG_Delivery.py
+          - downLoad_Sales_PI.py
+          - MT_downLoad_Sales_PI.py
+          - downLoad_order_relased.py
+          - downLoad_MT_order_relased.py
+
   schedule:
-  - cron: '0 2 * * *'     # 8:00 AM BD
-  - cron: '30 3 * * *'    # 9:30 AM BD
-  - cron: '30 4 * * *'    # 10:30 AM BD
-  - cron: '30 5 * * *'    # 11:30 AM BD
-  - cron: '30 6 * * *'    # 12:30 PM BD
-  - cron: '0 7 * * *'     # 1:00 PM BD
-  - cron: '30 7 * * *'    # 1:30 PM BD
-  - cron: '0 8 * * *'     # 2:00 PM BD
-  - cron: '0 10 * * *'    # 4:00 PM BD ✅
-  - cron: '0 11 * * *'    # 5:00 PM BD ✅
-  - cron: '0 12 * * *'    # 6:00 PM BD ✅
-  - cron: '0 13 * * *'    # 7:00 PM BD ✅
+    - cron: '0 2 * * *'    # 8:00 AM BD
+    - cron: '30 3 * * *'   # 9:30 AM BD
+    - cron: '30 4 * * *'   # 10:30 AM BD
+    - cron: '30 5 * * *'   # 11:30 AM BD
+    - cron: '30 6 * * *'   # 12:30 PM BD
+    - cron: '0 7 * * *'    # 1:00 PM BD
+    - cron: '30 7 * * *'   # 1:30 PM BD
+    - cron: '0 8 * * *'    # 2:00 PM BD
+    - cron: '0 10 * * *'   # 4:00 PM BD
+    - cron: '0 11 * * *'   # 5:00 PM BD
+    - cron: '0 12 * * *'   # 6:00 PM BD
+    - cron: '0 13 * * *'   # 7:00 PM BD
 
 jobs:
   run-script:
@@ -40,72 +58,26 @@ jobs:
         run: |
           echo "${{ secrets.GOOGLE_CREDENTIALS_B64 }}" | base64 -d > gcreds.json
 
-
-##########################     Production DATA            #############################
-        
-
-      - name: Run downLoad_Invoice_summary
+      # ✅ Run scripts conditionally
+      - name: Run ALL or Single Script
         env:
           GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
-        run: python downLoad_Invoice_summary.py
-
-      - name: Run downLoad_MT_Invoice_summary
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
-        run: python downLoad_MT_Invoice_summary.py
-
-
-##########################     Combine Invice DATA            #############################
-
-      - name: Run Lc Recv Data
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
-        run: python downLoad_LC_Recv_Data.py
-
-
-##########################     FG DATA            #############################
-
-
-      - name: Run Zipper FG Delivery Data
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
-        run: python downLoad_FG_Delivery.py
-
-
-      - name: Run Metal Trims FG delivery Data
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
-        run: python MT_downLoad_FG_Delivery.py
-
-
-
-##########################     PI DATA            #############################
-
-      - name: Run Zipper Sales PI Data
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
-        run: python downLoad_Sales_PI.py
-
-
-      - name: Run Metal Trims Sales PI Data
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
-        run: python MT_downLoad_Sales_PI.py
-
-
-##########################     OA DATA            #############################
-
-      - name: Run order_relased
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
-        run: python downLoad_order_relased.py
-
-
-      - name: Run downLoad_MT_order_relased
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
-        run: python downLoad_MT_order_relased.py
-        
+        run: |
+          if [[ "${{ github.event.inputs.script }}" == "ALL" || "${{ github.event_name }}" == "schedule" ]]; then
+            echo "Running ALL scripts..."
+            python downLoad_Invoice_summary.py
+            python downLoad_MT_Invoice_summary.py
+            python downLoad_LC_Recv_Data.py
+            python downLoad_FG_Delivery.py
+            python MT_downLoad_FG_Delivery.py
+            python downLoad_Sales_PI.py
+            python MT_downLoad_Sales_PI.py
+            python downLoad_order_relased.py
+            python downLoad_MT_order_relased.py
+          else
+            echo "Running single script: ${{ github.event.inputs.script }}"
+            python "${{ github.event.inputs.script }}"
+          fi
 
       - name: Clean up creds
         run: rm gcreds.json
