@@ -20,19 +20,19 @@ on:
           - downLoad_order_relased.py
           - downLoad_MT_order_relased.py
 
-  # schedule:
-    # - cron: '0 2 * * *'    # 8:00 AM BD
-    # - cron: '30 3 * * *'   # 9:30 AM BD
-    # - cron: '30 4 * * *'   # 10:30 AM BD
-    # - cron: '30 5 * * *'   # 11:30 AM BD
-    # - cron: '30 6 * * *'   # 12:30 PM BD
-    # - cron: '0 7 * * *'    # 1:00 PM BD
-    # - cron: '30 7 * * *'   # 1:30 PM BD
-    # - cron: '0 8 * * *'    # 2:00 PM BD
-    # - cron: '0 10 * * *'   # 4:00 PM BD
-    # - cron: '0 11 * * *'   # 5:00 PM BD
-    # - cron: '0 12 * * *'   # 6:00 PM BD
-    # - cron: '0 13 * * *'   # 7:00 PM BD
+  schedule:
+    - cron: '0 2 * * *'    # 8:00 AM BD
+    - cron: '30 3 * * *'   # 9:30 AM BD
+    - cron: '30 4 * * *'   # 10:30 AM BD
+    - cron: '30 5 * * *'   # 11:30 AM BD
+    - cron: '30 6 * * *'   # 12:30 PM BD
+    - cron: '0 7 * * *'    # 1:00 PM BD
+    - cron: '30 7 * * *'   # 1:30 PM BD
+    - cron: '0 8 * * *'    # 2:00 PM BD
+    - cron: '0 10 * * *'   # 4:00 PM BD
+    - cron: '0 11 * * *'   # 5:00 PM BD
+    - cron: '0 12 * * *'   # 6:00 PM BD
+    - cron: '0 13 * * *'   # 7:00 PM BD
 
 jobs:
   run-script:
