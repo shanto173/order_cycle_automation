@@ -64,7 +64,7 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: gcreds.json
         run: |
           if [[ "${{ github.event.inputs.script }}" == "ALL" || "${{ github.event_name }}" == "schedule" ]]; then
-            echo "Running ALL scripts..."
+            echo "Running ALL scripts..."  
             python downLoad_Invoice_summary.py
             python downLoad_MT_Invoice_summary.py
             python downLoad_LC_Recv_Data.py
