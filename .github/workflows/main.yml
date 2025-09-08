@@ -65,11 +65,11 @@ jobs:
         run: |
           if [[ "${{ github.event.inputs.script }}" == "ALL" || "${{ github.event_name }}" == "schedule" ]]; then
             echo "Running ALL scripts..."  
+            python downLoad_FG_Delivery.py
+            python MT_downLoad_FG_Delivery.py
             python downLoad_Invoice_summary.py
             python downLoad_MT_Invoice_summary.py
             python downLoad_LC_Recv_Data.py
-            python downLoad_FG_Delivery.py
-            python MT_downLoad_FG_Delivery.py
             python downLoad_Sales_PI.py
             python MT_downLoad_Sales_PI.py
             python downLoad_order_relased.py
